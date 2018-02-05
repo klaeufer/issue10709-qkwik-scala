@@ -1,21 +1,14 @@
-name := "iterators-scala"
+name := "issue10709-scala"
 
-version := "0.2"
+version := "0.1"
 
 scalaVersion := "2.12.4"
 
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
 
 libraryDependencies ++= Seq(
-  "org.scalatest"     %% "scalatest"  % "3.0.5" % Test,
-  "org.scalamock"     %% "scalamock"  % "4.0.0" % Test,
-  "com.storm-enroute" %% "scalameter" % "0.9"   % Test
+  "org.scalatest"     %% "scalatest"    % "3.0.5"  % Test,
+  "org.mockito"       %  "mockito-core" % "2.13.0" % Test
 )
-
-testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")
-
-logBuffered := false
-
-parallelExecution in Test := false
 
 enablePlugins(JavaAppPackaging)
