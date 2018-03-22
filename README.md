@@ -1,0 +1,1 @@
+This issue has been fixed as of Scala 2.12.5.
