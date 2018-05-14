@@ -1,5 +1,4 @@
 import scala.runtime.ScalaRunTime.stringOf
-import org.junit.Assert._
 import org.junit.Test
 import org.mockito.Mockito._
 import org.scalatest.junit.AssertionsForJUnit
@@ -38,7 +37,7 @@ class JUnitIssue10709 extends AssertionsForJUnit with MockitoSugar {
     assertSameElements(List(10, -1, -1, -11, 11, -2, -2, -13, 13, -3), results)
   }
 
-  @Test def `scan is lazy enough with mocking`(): Unit = {
+  @Test def `scan is lazy enough using spy`(): Unit = {
     val input = spy(Iterator(1, 2, 3))
     val expected = Array(0, 1, 3, 6)
     val result = input.scanLeft(0)(_ + _)
