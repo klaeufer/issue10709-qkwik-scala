@@ -12,12 +12,12 @@ class TestIssue10709 extends WordSpec with MockitoSugar {
     } takeWhile (_.isDefined) map (_.get)
 
   def verifyIncremental(sut: Iterator[Int] => Iterator[Int]): Unit = {
-    val input = spy(Iterator(1, 2, 3))
+    val it = spy(Iterator(1, 2, 3))
     val expected = Array(0, 1, 3, 6)
-    val result = sut(input)
+    val result = sut(it)
     for (i <- expected.indices) {
       assert(result.next() === expected(i))
-      verify(input, times(i)).next()
+      verify(it, times(i)).next()
     }
   }
 
