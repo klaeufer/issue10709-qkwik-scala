@@ -30,7 +30,7 @@ class IteratorMapIsLazy extends AssertionsForJUnit with MockitoSugar {
   @Test def mapIsLazyUsingSpyFrom(): Unit = {
     val it = spy(Iterator.from(1))
     val result = it.map(_ + 1)
-    verify(it, never).next() // FIXME NPE on Linux but not MacOS
+    verify(it, never).next() // FIXME NPE on Linux but not MacOS - see separate Mockito issue
     result.next()
     verify(it, times(1)).next()
   }
