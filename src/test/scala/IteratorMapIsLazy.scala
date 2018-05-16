@@ -6,7 +6,7 @@ import org.scalatest.mockito.MockitoSugar
 
 import scala.collection.AbstractIterator
 
-class MapIsLazy extends AssertionsForJUnit with MockitoSugar {
+class IteratorMapIsLazy extends AssertionsForJUnit with MockitoSugar {
 
   @Test def mapIsLazyAbstractIterator(): Unit = {
     var counter = 0
