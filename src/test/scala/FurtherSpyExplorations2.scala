@@ -32,9 +32,13 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     val it = new Iterator[Int] {
       var i = 0;
       def hasNext = {
+        println("hasNext " + counter)
         counter = i; true
       };
-      def next = { i += 1; i }
+      def next = {
+        println("next " + counter)
+        i += 1; i
+      }
     }
     val slidingIt = it sliding 2
     slidingIt.next
@@ -42,13 +46,17 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   }
 
   @Test def groupedIteratorShouldNotAskForUnneededElement_Spy(): Unit = {
+
     val it = spy(Iterator.from(1))
 
     val slidingIt = it sliding 2
 
     slidingIt.next
 
-    verify(it, times(1)).hasNext
+    verify(it, times(3)).hasNext
+
+    verify(it, times(2)).next()
+
   }
 
 
