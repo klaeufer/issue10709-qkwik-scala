@@ -94,14 +94,30 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   }
 
   @Test def noExcessiveHasNextInJoinIterator_Spy: Unit = {
-
+    //var counter = 0
     val exp = List(1,2,3,1,2,3)
+    val it_a = spy(Iterator(1,2,3))
+    val it_b = spy(Iterator(1,2,3))
+    // Iterate separately
+    val res = new mutable.ArrayBuffer[Int]
+    it_a.foreach(res += _)
+    it_b.foreach(res += _)
+    assertSameElements(exp, res)
+    verify(it_a, times(4)).hasNext
+    verify(it_b, times(4)).hasNext
 
-    val it = spy(Iterator(1,2,3))
-
-
-
-
+    // JoinIterator
+    //counter = 0
+    //res.clear
+    //(it ++ it).foreach(res += _)
+    //assertSameElements(exp, res)
+    //assertEquals(8, counter) // was 17
+    // ConcatIterator
+    //counter = 0
+    //res.clear
+    //(Iterator.empty ++ it ++ it).foreach(res += _)
+    //assertSameElements(exp, res)
+    //assertEquals(8, counter) // was 14
   }
 
 
