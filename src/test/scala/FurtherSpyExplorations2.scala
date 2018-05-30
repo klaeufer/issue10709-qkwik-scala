@@ -99,8 +99,7 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     val it = spy(Iterator(1,2,3))
     // Iterate separately
     val res = new mutable.ArrayBuffer[Int]
-    it.foreach(res += _)
-    it.foreach(res += _)
+    (it ++ it).foreach(res += _)
     assertSameElements(exp, res)
     verify(it, times(8)).hasNext
 
