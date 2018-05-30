@@ -71,7 +71,9 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     def it: Iterator[Int] = new Iterator[Int] {
       val parent = List(1,2,3).iterator
       def next(): Int = parent.next
-      def hasNext: Boolean = { counter += 1; parent.hasNext }
+      def hasNext: Boolean = {
+        counter += 1; parent.hasNext
+      }
     }
     // Iterate separately
     val res = new mutable.ArrayBuffer[Int]
@@ -93,28 +95,15 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     assertEquals(8, counter) // was 14
   }
 
-  @Test def noExcessiveHasNextInJoinIterator_Spy: Unit = {
-    //var counter = 0
+  @Test def noExcessiveHasNextInJoinIterator_SpyJoin: Unit = {
     val exp = List(1,2,3,1,2,3)
-    val it = spy(Iterator(1,2,3))
-    // Iterate separately
-    val res = new mutable.ArrayBuffer[Int]
-    (it ++ it).foreach(res += _)
-    assertSameElements(exp, res)
-    verify(it, times(8)).hasNext
-
+    def it = Iterator(1,2,3)
     // JoinIterator
-    //counter = 0
-    //res.clear
-    //(it ++ it).foreach(res += _)
-    //assertSameElements(exp, res)
-    //assertEquals(8, counter) // was 17
-    // ConcatIterator
-    //counter = 0
-    //res.clear
-    //(Iterator.empty ++ it ++ it).foreach(res += _)
-    //assertSameElements(exp, res)
-    //assertEquals(8, counter) // was 14
+    val res = new mutable.ArrayBuffer[Int]
+    val itv = spy(Iterator.empty ++ it ++ it)
+    itv.foreach(res += _)
+    assertSameElements(exp, res)
+    verify(itv, times(13)).hasNext
   }
 
 
