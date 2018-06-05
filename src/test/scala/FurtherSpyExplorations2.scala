@@ -142,7 +142,6 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     def mkInfinite = Iterator continually {
       results += 1 ; 1
     }
-    println(mkIterator)
     // Stream is strict in its head so we should see 1 from each of them.
     val s1 = mkIterator.toStream
     val s2 = mkInfinite.toStream
@@ -152,17 +151,18 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   }
 
   @Test def toStreamIsSufficientlyLazyWithSpy(): Unit = {
-    val results = collection.mutable.ListBuffer.empty[Int]
+    val iteratorFunc = spy(new Function1[Int, Int] {
+      def apply(x: Int) = 1
+    })
+    val infiniteFunc = spy(new Function0[Int] {
+      def apply() = 1
+    })
 
-    val iterator_func = spy(new Function1[Int, Int] { def apply(x: Int) = { results += x ; x } })
-    val infinite_func = spy(new Function0[Int] { def apply() = { results += 5 ; 1 } })
+    ((1 to 5).iterator map (x => iteratorFunc apply x )).toStream
+    (Iterator continually { infiniteFunc apply() }).toStream
 
-    ((10 to 15).iterator map (x => iterator_func.apply(x))).toStream
-    (Iterator continually { infinite_func.apply() }).toStream
-
-    verify(iterator_func, times(1)).apply(10)
-    verify(infinite_func, times(1)).apply()
-    assertSameElements(List(10,5), results)
+    verify(iteratorFunc, times(1)).apply(1)
+    verify(infiniteFunc, times(1)).apply()
   }
 
   @Test def toStreamIsSufficientlyLazyWithSpyStreamFrom(): Unit = {
