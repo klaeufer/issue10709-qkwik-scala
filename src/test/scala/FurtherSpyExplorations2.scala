@@ -134,6 +134,31 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     verify(i1, times(4)).hasNext
   }
 
+  @Test def toStreamIsSufficientlyLazy(): Unit = {
+    val results = collection.mutable.ListBuffer.empty[Int]
+    def mkIterator = (1 to 5).iterator map (x => {
+      results += x ; x
+    })
+    def mkInfinite = Iterator continually {
+      results += 1 ; 1
+    }
+    // Stream is strict in its head so we should see 1 from each of them.
+    val s1 = mkIterator.toStream
+    val s2 = mkInfinite.toStream
+    // back and forth without slipping into nontermination.
+    results += (Stream from 1).toIterator.drop(10).toStream.drop(10).toIterator.next()
+    assertSameElements(List(1,1,21), results)
+  }
+
+  @Test def toStreamIsSufficientlyLazyWithSpy(): Unit = {
+    val results = collection.mutable.ListBuffer.empty[Int]
+    val it = spy((Stream from 1).toIterator)
+    results += it.drop(10).toStream.drop(10).toIterator.next()
+    verify(it, times(20)).hasNext
+    verify(it, times(10)).next()
+    verify(it, times(10)).isEmpty
+    assertSameElements(List(21), results)
+  }
 
 
 }
