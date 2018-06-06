@@ -3,6 +3,9 @@ import org.scalatest.WordSpec
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 
+import scala.runtime.ScalaRunTime.stringOf
+import scala.collection.{ AbstractIterator, GenIterable, IterableLike }
+
 class TestIssue10709 extends WordSpec with MockitoSugar {
 
   def scanLeftUsingIterate[T, U](it: Iterator[T])(z: U)(op: (U, T) => U): Iterator[U] =
