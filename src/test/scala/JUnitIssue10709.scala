@@ -1,5 +1,3 @@
-import org.scalatest.junit.AssertionsForJUnit
-
 import scala.collection.{ AbstractIterator, GenIterable, IterableLike }
 import scala.runtime.ScalaRunTime.stringOf
 
