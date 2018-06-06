@@ -1,13 +1,13 @@
-import scala.collection.{ AbstractIterator, GenIterable, IterableLike }
-import scala.runtime.ScalaRunTime.stringOf
+import scala.collection.AbstractIterator
+import scala.tools.testing.AssertUtil.assertSameElements
 
-import org.junit.Assert._
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import org.mockito.Mockito._
 
 class JUnitIssue10709 {
+
+  // this method copied from scala_2.12.x/test/junit/scala/collection/IteratorTest.scala
 
   @Test def `scan is lazy enough`(): Unit = {
     val results = collection.mutable.ListBuffer.empty[Int]
@@ -38,6 +38,8 @@ class JUnitIssue10709 {
     assertSameElements(List(10, -1, -1, -11, 11, -2, -2, -13, 13, -3), results)
   }
 
+  // our own spy-based version
+
   @Test def `scan is lazy enough w/ spy`(): Unit = {
     val input = spy(Iterator(1, 2, 3))
     val expected = Array(0, 1, 3, 6)
@@ -47,17 +49,4 @@ class JUnitIssue10709 {
       verify(input, times(i)).next()
     }
   }
-
-  // copied from test/junit/scala/tools/testing/AssertUtil.scala
-
-  def assertSameElements[A, B >: A](expected: IterableLike[A, _], actual: GenIterable[B], message: String = ""): Unit =
-    if (!(expected sameElements actual))
-      fail(
-        f"${if (message.nonEmpty) s"$message " else ""}expected:<${stringOf(expected)}> but was:<${stringOf(actual)}>")
-
-  /**
-   * Convenient for testing iterators.
-   */
-  def assertSameElements[A, B >: A](expected: IterableLike[A, _], actual: Iterator[B]): Unit =
-    assertSameElements(expected, actual.toList, "")
 }
