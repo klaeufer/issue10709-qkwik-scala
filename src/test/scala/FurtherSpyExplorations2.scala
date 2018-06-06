@@ -151,21 +151,11 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   }
 
   @Test def toStreamIsSufficientlyLazyWithSpy(): Unit = {
-    //debuggin
-    var test = new Function1[Int, Int] {
-      def apply(x: Int) = {
-        println(x)
-        1
-      }
-    }
-    (1 to 5).iterator.map(test).toStream
-
-
     val iteratorFunc = spy(new Function1[Int, Int] { def apply(x: Int) = { 1 } })
     val infiniteFunc = spy(new Function0[Int] { def apply() = { 1 } })
 
     (1 to 5).iterator.map(iteratorFunc).toStream
-    Iterator.continually(infiniteFunc).toStream
+    Iterator.continually(infiniteFunc()).toStream
 
     verify(iteratorFunc, times(1)).apply(1)
     verify(infiniteFunc, times(1)).apply()
