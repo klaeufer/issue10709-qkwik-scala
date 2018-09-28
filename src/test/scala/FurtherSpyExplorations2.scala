@@ -52,24 +52,23 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     verify(it, times(2)).next()
   }
 
-
   def assertSameElements[A, B >: A](expected: IterableLike[A, _], actual: GenIterable[B], message: String = ""): Unit =
     if (!(expected sameElements actual))
       fail(
-        f"${ if (message.nonEmpty) s"$message " else "" }expected:<${ stringOf(expected) }> but was:<${ stringOf(actual) }>"
-      )
+        f"${if (message.nonEmpty) s"$message " else ""}expected:<${stringOf(expected)}> but was:<${stringOf(actual)}>")
 
-  /** Convenient for testing iterators.
-    */
+  /**
+   * Convenient for testing iterators.
+   */
   def assertSameElements[A, B >: A](expected: IterableLike[A, _], actual: Iterator[B]): Unit =
     assertSameElements(expected, actual.toList, "")
 
   // scala/bug#9623
   @Test def noExcessiveHasNextInJoinIterator_Original: Unit = {
     var counter = 0
-    val exp = List(1,2,3,1,2,3)
+    val exp = List(1, 2, 3, 1, 2, 3)
     def it: Iterator[Int] = new Iterator[Int] {
-      val parent = List(1,2,3).iterator
+      val parent = List(1, 2, 3).iterator
       def next(): Int = parent.next
       def hasNext: Boolean = {
         counter += 1; parent.hasNext
@@ -109,8 +108,8 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   }
 
   @Test def noExcessiveHasNextInJoinIterator_SpyJoinSeparately: Unit = {
-    val exp = List(1,2,3,1,2,3)
-    def it = spy(Iterator(1,2,3))
+    val exp = List(1, 2, 3, 1, 2, 3)
+    def it = spy(Iterator(1, 2, 3))
     // JoinIterator
     val res = new mutable.ArrayBuffer[Int]
     val i0 = it
@@ -122,8 +121,8 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   }
 
   @Test def noExcessiveHasNextInJoinIterator_SpyConcatSeparately: Unit = {
-    val exp = List(1,2,3,1,2,3)
-    def it = spy(Iterator(1,2,3))
+    val exp = List(1, 2, 3, 1, 2, 3)
+    def it = spy(Iterator(1, 2, 3))
     // ConcatIterator
     val res = new mutable.ArrayBuffer[Int]
     val i0 = it
@@ -137,17 +136,17 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   @Test def toStreamIsSufficientlyLazy(): Unit = {
     val results = collection.mutable.ListBuffer.empty[Int]
     def mkIterator = (1 to 5).iterator map (x => {
-      results += x ; x
+      results += x; x
     })
     def mkInfinite = Iterator continually {
-      results += 1 ; 1
+      results += 1; 1
     }
     // Stream is strict in its head so we should see 1 from each of them.
     val s1 = mkIterator.toStream
     val s2 = mkInfinite.toStream
     // back and forth without slipping into nontermination.
     results += (Stream from 1).toIterator.drop(10).toStream.drop(10).toIterator.next()
-    assertSameElements(List(1,1,21), results)
+    assertSameElements(List(1, 1, 21), results)
   }
 
   @Test def toStreamIsSufficientlyLazyWithSpy(): Unit = {
@@ -164,6 +163,5 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   @Test def toStreamIsSufficientlyLazyWithSpyStreamFrom(): Unit = {
     assertEquals(21, (Stream from 1).toIterator.drop(10).toStream.drop(10).toIterator.next())
   }
-
 
 }
