@@ -23,7 +23,7 @@ only when we invoke `next` on the result of `map`:
     @Test def mapIsLazyUsingSpyFrom(): Unit = {
       val it = spy(Iterator.from(1))
       val result = it.map(_ + 1)
-      verify(it, never).next() // <-- NPE
+      verify(it, never).next() // <-- NPE in Iterator.next
       result.next()
       verify(it, times(1)).next()
     }
@@ -55,5 +55,7 @@ with `lazy val` versus thunking, please look at this test suite:
 For more context and examples, please refer to this brief technical report (5 pages):
 
 > *Auto-generated Spies Increase Test Maintainability*
+
 > Konstantin Läufer, John O'Sullivan, and George K. Thiruvathukal
+
 > https://arxiv.org/abs/1808.09630
