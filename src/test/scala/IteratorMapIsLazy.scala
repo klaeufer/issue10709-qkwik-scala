@@ -30,7 +30,7 @@ class IteratorMapIsLazy extends AssertionsForJUnit with MockitoSugar {
   @Test def mapIsLazyUsingSpyFrom(): Unit = {
     val it = spy(Iterator.from(1))
     val result = it.map(_ + 1)
-    verify(it, never).next() // FIXME NPE on Linux but not MacOS - see separate Mockito issue
+    verify(it, never).next() // <-- NPE in Iterator.next
     result.next()
     verify(it, times(1)).next()
   }
@@ -57,7 +57,7 @@ class IteratorMapIsLazy extends AssertionsForJUnit with MockitoSugar {
       private[this] var i = start
       def hasNext: Boolean = true
       def next(): Int = {
-        lazy val result = i
+        lazy val result = i // lazy val does not help here
         i += 1
         result // <-- NPE
       }
@@ -71,8 +71,8 @@ class IteratorMapIsLazy extends AssertionsForJUnit with MockitoSugar {
 
   @Test def mapIsLazyUsingSpyFromInlinedPrivateThisThunk(): Unit = {
     def from(start: Int) = new AbstractIterator[Int] {
-      private[this] var i = () => start
-      def hasNext: Boolean = true
+      private[this] var i = () => start // thunking avoids NPE below
+      def hasNext: Boolean = true // but out of the question for performance reasons
       def next(): Int = {
         val result = i()
         i = () => (i() + 1)
@@ -108,7 +108,7 @@ class IteratorMapIsLazy extends AssertionsForJUnit with MockitoSugar {
       private var i = start
       def hasNext: Boolean = true
       def next(): Int = {
-        lazy val result = i
+        lazy val result = i // <-- lazy val avoids NPE below
         i += 1
         result
       }
