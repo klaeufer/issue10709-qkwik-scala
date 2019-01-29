@@ -8,7 +8,7 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked")
 
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest"       % "3.0.5"  % Test,
-  "org.mockito"   %  "mockito-inline"  % "2.23.4" % Test,
+  "org.mockito"   %  "mockito-inline"  % "2.+"    % Test,
   "com.novocode"  %  "junit-interface" % "0.11"   % Test
 )
 
