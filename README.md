@@ -54,8 +54,6 @@ with `lazy val` versus thunking, please look at this test suite:
 
 For more context and examples, please refer to this brief technical report (5 pages):
 
-> *Auto-generated Spies Increase Test Maintainability*
-
-> Konstantin Läufer, John O'Sullivan, and George K. Thiruvathukal
-
+> *Auto-generated Spies Increase Test Maintainability* \
+> Konstantin Läufer, John O'Sullivan, and George K. Thiruvathukal \
 > https://arxiv.org/abs/1808.09630
