@@ -50,7 +50,7 @@ the original object and the generated spy.*
 For an exploration of different combinations of `private` versus `private[this]`
 with `lazy val` versus thunking, please look at this test suite:
 
->  [IteratorMapIsLazy](src/test/scala/IteratorMapIsLazy.scala)
+[src/test/scala/IteratorMapIsLazy](src/test/scala/IteratorMapIsLazy.scala)
 
 For more context and examples, please refer to this brief technical report (5 pages):
 
