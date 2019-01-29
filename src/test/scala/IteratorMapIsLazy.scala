@@ -35,6 +35,91 @@ class IteratorMapIsLazy extends AssertionsForJUnit with MockitoSugar {
     verify(it, times(1)).next()
   }
 
+  @Test def mapIsLazyUsingSpyFromInlinedPrivateThisORIG(): Unit = {
+    def from(start: Int) = new AbstractIterator[Int] {
+      private[this] var i = start
+      def hasNext: Boolean = true
+      def next(): Int = {
+        val result = i
+        i += 1
+        result // <-- NPE
+      }
+    }
+    val it = spy(from(1))
+    val result = it.map(_ + 1)
+    verify(it, never).next()
+    result.next()
+    verify(it, times(1)).next()
+  }
+
+  @Test def mapIsLazyUsingSpyFromInlinedPrivateThisLazyVal(): Unit = {
+    def from(start: Int) = new AbstractIterator[Int] {
+      private[this] var i = start
+      def hasNext: Boolean = true
+      def next(): Int = {
+        lazy val result = i
+        i += 1
+        result // <-- NPE
+      }
+    }
+    val it = spy(from(1))
+    val result = it.map(_ + 1)
+    verify(it, never).next()
+    result.next()
+    verify(it, times(1)).next()
+  }
+
+  @Test def mapIsLazyUsingSpyFromInlinedPrivateThisThunk(): Unit = {
+    def from(start: Int) = new AbstractIterator[Int] {
+      private[this] var i = () => start
+      def hasNext: Boolean = true
+      def next(): Int = {
+        val result = i()
+        i = () => (i() + 1)
+        result
+      }
+    }
+    val it = spy(from(1))
+    val result = it.map(_ + 1)
+    verify(it, never).next()
+    result.next()
+    verify(it, times(1)).next()
+  }
+
+  @Test def mapIsLazyUsingSpyFromInlinedPrivateORIG(): Unit = {
+    def from(start: Int) = new AbstractIterator[Int] {
+      private var i = start
+      def hasNext: Boolean = true
+      def next(): Int = {
+        val result = i
+        i += 1
+        result // <-- NPE
+      }
+    }
+    val it = spy(from(1))
+    val result = it.map(_ + 1)
+    verify(it, never).next()
+    result.next()
+    verify(it, times(1)).next()
+  }
+
+  @Test def mapIsLazyUsingSpyFromInlinedPrivateLazyVal(): Unit = {
+    def from(start: Int) = new AbstractIterator[Int] {
+      private var i = start
+      def hasNext: Boolean = true
+      def next(): Int = {
+        lazy val result = i
+        i += 1
+        result
+      }
+    }
+    val it = spy(from(1))
+    val result = it.map(_ + 1)
+    verify(it, never).next()
+    result.next()
+    verify(it, times(1)).next()
+  }
+
   // https://github.com/scala/scala/blob/v2.12.6/src/library/scala/collection/Iterator.scala#L455
   @Test def mapIsLazyUsingSpyIterate(): Unit = {
     val it = spy(Iterator.iterate(1)(_ + 1))
