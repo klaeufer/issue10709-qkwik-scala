@@ -18,9 +18,9 @@ class IteratorMapIsLazy extends AssertionsForJUnit with MockitoSugar {
   }
 
   @Test def mapIsLazyUsingSpy(): Unit = {
-    val it = spy(Iterator.from(1))
-    val result = it.map(_ + 1)
-    verify(it, never).next() // <-- NPE in Iterator.next
+    val it = spy(Iterator.continually("hello"))
+    val result = it.map(_.length)
+    verify(it, never).next()
     result.next()
     verify(it, times(1)).next()
   }
