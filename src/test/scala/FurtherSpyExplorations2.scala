@@ -48,7 +48,7 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   @Test def groupedIteratorShouldNotAskForUnneededElement_Spy(): Unit = {
     val it = spy(Iterator.continually("hello"))
     val slidingIt = it sliding 2
-    slidingIt.next
+    slidingIt.next()
     verify(it, times(2)).next()
   }
 
