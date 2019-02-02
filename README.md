@@ -8,8 +8,8 @@ For example, we can test whether the `Iterator.map` method is lazy in terms of
 invoking `next` on the original object only when we invoke `next` on the result of `map`:
 
     @Test def mapIsLazyUsingSpyFrom(): Unit = {
-      val it = spy(Iterator.from(1))
-      val result = it.map(_ + 1)
+      val it = spy(Iterator.continually("hello"))
+      val result = it.map(_.length)
       verify(it, never).next()
       result.next()
       verify(it, times(1)).next()
@@ -22,6 +22,6 @@ please refer to this technical report (5 pages):
 Konstantin Läufer, John O'Sullivan, and George K. Thiruvathukal \
 https://arxiv.org/abs/1808.09630
 
-Unfortunately, there is an issue that precludes us from using Mockito with generic Scala traits on Linux:
+Also, make sure to use reference types as to instantiate any SUTs based on generic Scala traits; see also
 
 https://github.com/mockito/mockito/issues/1605
