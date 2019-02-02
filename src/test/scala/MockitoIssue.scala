@@ -19,7 +19,7 @@ object MockitoIssue {
     println("[main] exercising 1")
     val result = it.map(_ + 1)
     println("[main] verifying 1")
-    verify(it, never).next()
+    verify(it, never).next() // <-- NPE
     println("[main] exercising 2")
     result.next()
     println("[main] verifying 2")
