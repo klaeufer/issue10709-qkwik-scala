@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/klaeufer/issue10709-scala.svg?branch=master)](https://travis-ci.org/klaeufer/issue10709-scala)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=klaeufer_issue10709-scala&metric=alert_status)](https://sonarcloud.io/dashboard?id=klaeufer_issue10709-scala)
 
 [This issue](https://github.com/scala/bug/issues/10709)
 has been fixed as of Scala 2.12.5.
