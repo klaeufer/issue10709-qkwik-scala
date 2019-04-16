@@ -99,10 +99,9 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     def it = spy(Iterator(1, 2, 3))
     // Iterate separately
     val i0 = it
-    val r0 = i0.toList
     val i1 = it
-    val r1 = i1.toList
-    assertSameElements(exp, r0 ++ r1)
+    val res = i0.toList ++ i1.toList
+    assertSameElements(exp, res)
     verify(i0, times(4)).hasNext
     verify(i1, times(4)).hasNext
   }
@@ -111,10 +110,9 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     val exp = List(1, 2, 3, 1, 2, 3)
     def it = spy(Iterator(1, 2, 3))
     // JoinIterator
-    val res = new mutable.ArrayBuffer[Int]
     val i0 = it
     val i1 = it
-    (i0 ++ i1).foreach(res += _)
+    val res = (i0 ++ i1).toList
     assertSameElements(exp, res)
     verify(i0, times(4)).hasNext
     verify(i1, times(4)).hasNext
@@ -124,10 +122,9 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
     val exp = List(1, 2, 3, 1, 2, 3)
     def it = spy(Iterator(1, 2, 3))
     // ConcatIterator
-    val res = new mutable.ArrayBuffer[Int]
     val i0 = it
     val i1 = it
-    (Iterator.empty ++ i0 ++ i1).foreach(res += _)
+    val res = (Iterator.empty ++ i0 ++ i1).toList
     assertSameElements(exp, res)
     verify(i0, times(4)).hasNext
     verify(i1, times(4)).hasNext
