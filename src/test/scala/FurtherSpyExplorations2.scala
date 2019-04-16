@@ -163,5 +163,4 @@ class FurtherSpyExplorations2 extends AssertionsForJUnit with MockitoSugar {
   @Test def toStreamIsSufficientlyLazyWithSpyStreamFrom(): Unit = {
     assertEquals(21, (Stream from 1).toIterator.drop(10).toStream.drop(10).toIterator.next())
   }
-
 }
